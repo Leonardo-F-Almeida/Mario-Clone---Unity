@@ -13,9 +13,9 @@ public class PlayerMovement : MonoBehaviour {
     
 	// Use this for initialization
 	void Start () {
-		body = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();
-		sprite = GetComponent<SpriteRenderer>();
+		body 		= GetComponent<Rigidbody2D>();
+		animator 	= GetComponent<Animator>();
+		sprite 		= GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -31,7 +31,17 @@ public class PlayerMovement : MonoBehaviour {
         
         if(Input.GetKeyDown("space"))
         {
-        	animator.SetBool("isJump",true);
+            if(isGrounded)
+            {
+                animator.SetBool("isJump",true);
+                
+                Vector2 jumpVector = new Vector2 (0, 200);
+
+                body.AddForce (jumpVector);  
+
+                isGrounded = false;
+            }
+        	
         }	
 
         if(moveHorizontal != 0)
@@ -48,7 +58,8 @@ public class PlayerMovement : MonoBehaviour {
         {
         	sprite.flipX = true;
         }
-        else
+        
+		if(moveHorizontal > 0)
         {
         	sprite.flipX = false;	
         }
@@ -58,5 +69,19 @@ public class PlayerMovement : MonoBehaviour {
 
         //Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
         body.AddForce (movement * speed);
+    }
+
+     void OnCollisionEnter2D(Collision2D coll) 
+     {
+        if (coll.gameObject.tag == "ground")
+        {
+                isGrounded = true;
+                animator.SetBool("isJump",false);
+        }
+        if (coll.gameObject.tag == "Enemy")
+        {
+                isGrounded = true;
+                animator.SetBool("isJump",false);
+        }
     }
 }
