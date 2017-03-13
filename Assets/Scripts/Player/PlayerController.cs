@@ -4,6 +4,39 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
+	protected int _life  =  1;
+	protected bool _grounded;
+	protected bool _dead;
+
+
+	public bool isDead
+	{
+		get 
+		{
+			return _dead;
+		}
+	}
+
+	public bool isGrounded
+	{
+		get { return _grounded; }
+		set { _grounded = value; }
+	}
+
+	public int life
+	{
+		get 
+		{
+			return _life;
+		}
+	}
+
+	public void AddLife(int qtd) 
+	{
+		this._life += qtd;	
+	}
+
+
 	Animator _animator;
 	public Animator playerAnimator
 	{
@@ -45,7 +78,22 @@ public class PlayerController : MonoBehaviour
 			return _rigidBody;
 		}
 	}
-		
+
+	PlayerAnimationController _playerAnimationController;
+
+	public PlayerAnimationController playerAnimation
+	{
+		get
+		{
+			if(_playerAnimationController == null)
+			{
+				_playerAnimationController = GetComponent<PlayerAnimationController>();
+			}
+
+			return _playerAnimationController;
+		}
+	}
+
 	void Start()
 	{
 		if(GetComponent<Animator>() == null)
@@ -74,6 +122,56 @@ public class PlayerController : MonoBehaviour
 		{
 			_rigidBody = GetComponent<Rigidbody2D>();
 		}
+
+		if (GetComponent<PlayerAnimationController>() == null)
+		{
+			Debug.LogError("Get PlayerAnimationsController error");
+		}            
+		else
+		{
+			_playerAnimationController = GetComponent<PlayerAnimationController>();
+		}
 			
 	}
+
+
+	void FixedUpdate()
+	{
+		isGrounded = true;
+	}
+
+	void OnCollisionEnter2D(Collision2D coll) 
+	{
+		
+		if (coll.gameObject.tag == "ground")
+		{
+			isGrounded = true;
+		}
+
+		if (coll.gameObject.tag == "Life")
+		{
+			_life += 1;
+
+			if(playerAnimation.marioState == 0)
+			{
+				playerAnimation.GrowMario();
+			}
+		}
+
+		if (coll.gameObject.tag == "Enemy")
+		{
+			_life -= 1;
+
+			if(playerAnimation.marioState == 1)
+			{
+				playerAnimation.DecreaseMario();
+			}
+
+			if (_life <= 0) 
+			{
+				_dead = true;
+			}
+		}
+	}
+
 }

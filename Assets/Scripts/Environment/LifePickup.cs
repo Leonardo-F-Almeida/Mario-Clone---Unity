@@ -21,4 +21,13 @@ public class LifePickup : MonoBehaviour {
         //Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
         body.AddForce (movement * speed);
     }
+
+
+	void OnCollisionEnter2D(Collision2D coll) 
+	{
+		if (coll.gameObject.tag == "Player")
+		{
+			Destroy (this.gameObject);
+		}
+	}
 }

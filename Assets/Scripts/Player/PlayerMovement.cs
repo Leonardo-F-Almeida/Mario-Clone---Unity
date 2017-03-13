@@ -6,7 +6,6 @@ public class PlayerMovement : PlayerController {
 
 
     public float speed;             //Floating point variable to store the player's movement speed.
-    private bool isGrounded;
     
 	 //FixedUpdate is called at a fixed interval and is independent of frame rate.
     void FixedUpdate()
@@ -21,11 +20,11 @@ public class PlayerMovement : PlayerController {
 
 		if(moveHorizontal != 0)
 		{
-			playerAnimator.SetBool("isRunning",true);	
+			playerAnimation.RunningAnimation (true);	
 		}
 		else
 		{
-			playerAnimator.SetBool("isRunning",false	);		
+			playerAnimation.RunningAnimation (false);
 		}
 
 
@@ -50,7 +49,7 @@ public class PlayerMovement : PlayerController {
 		{
 			if(isGrounded)
 			{
-				playerAnimator.SetBool("isJump",true);
+				playerAnimation.Jump (true);
 
 				Vector2 jumpVector = new Vector2 (0, 200);
 
@@ -60,20 +59,5 @@ public class PlayerMovement : PlayerController {
 			}
 		}	
 	}
-
-
-
-     void OnCollisionEnter2D(Collision2D coll) 
-     {
-        if (coll.gameObject.tag == "ground")
-        {
-            isGrounded = true;
-			playerAnimator.SetBool("isJump",false);
-        }
-        if (coll.gameObject.tag == "Enemy")
-        {
-                isGrounded = true;
-			playerAnimator.SetBool("isJump",false);
-        }
-    }
+		
 }
