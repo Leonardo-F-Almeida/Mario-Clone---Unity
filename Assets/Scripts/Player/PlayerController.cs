@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
 	void OnCollisionEnter2D(Collision2D coll) 
 	{
 		
-		if (coll.gameObject.tag == "ground")
+		if (coll.gameObject.tag == "ground" || coll.gameObject.tag == "Block")
 		{
 			isGrounded = true;
 		}

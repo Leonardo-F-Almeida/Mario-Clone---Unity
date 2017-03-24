@@ -7,7 +7,6 @@ public class PlayerMovement : PlayerController {
 
     public float speed;             //Floating point variable to store the player's movement speed.
     
-	 //FixedUpdate is called at a fixed interval and is independent of frame rate.
     void FixedUpdate()
     {
 		Move ();
