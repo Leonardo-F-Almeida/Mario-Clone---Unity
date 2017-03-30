@@ -15,11 +15,6 @@ public class PlayerAnimationController : PlayerController
 		}
 	}
 
-	void FixedUpdate()
-	{
-		Jump (!isGrounded);
-	}
-
 	public void DecreaseMario()
 	{
 		playerAnimator.SetLayerWeight (0, 1);
@@ -49,5 +44,10 @@ public class PlayerAnimationController : PlayerController
 	public void Jump(bool isJump)
 	{
 		playerAnimator.SetBool("isJump",isJump);
+	}
+
+	public void Drift()
+	{
+		playerAnimator.SetTrigger ("drift");
 	}
 }

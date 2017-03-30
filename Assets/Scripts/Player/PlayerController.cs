@@ -133,21 +133,10 @@ public class PlayerController : MonoBehaviour
 		}
 			
 	}
-
-
-	void FixedUpdate()
-	{
-		isGrounded = true;
-	}
-
+		
 	void OnCollisionEnter2D(Collision2D coll) 
 	{
 		
-		if (coll.gameObject.tag == "ground" || coll.gameObject.tag == "Block")
-		{
-			isGrounded = true;
-		}
-
 		if (coll.gameObject.tag == "Life")
 		{
 			_life += 1;

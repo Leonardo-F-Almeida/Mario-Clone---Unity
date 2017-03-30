@@ -13,17 +13,31 @@ public class PlayerMovement : PlayerController {
 		Jump ();
     }
 
+
 	void Move()
 	{
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 
-		if(moveHorizontal != 0)
+		if (playerRigidBody.velocity.y == 0) 
 		{
-			playerAnimation.RunningAnimation (true);	
+			if (isGrounded != true) 
+			{
+				isGrounded = true;
+				playerAnimation.Jump (false);	
+			}
+		}
+		else 
+		{
+			isGrounded = false;
+		}
+
+		if(moveHorizontal == 0)
+		{
+			playerAnimation.RunningAnimation (false);	
 		}
 		else
 		{
-			playerAnimation.RunningAnimation (false);
+			playerAnimation.RunningAnimation (true);
 		}
 
 
@@ -40,6 +54,11 @@ public class PlayerMovement : PlayerController {
 		Vector2 movement = new Vector2 (moveHorizontal, 0);
 
 		playerRigidBody.AddForce (movement * speed);
+
+		if (moveHorizontal > 0  && isGrounded && Input.GetKeyDown(KeyCode.LeftArrow)||moveHorizontal < 0 && isGrounded && Input.GetKeyDown(KeyCode.RightArrow)) 
+		{
+			playerAnimation.Drift ();
+		}
 	}
 
 	void Jump()
@@ -53,8 +72,6 @@ public class PlayerMovement : PlayerController {
 				Vector2 jumpVector = new Vector2 (0, 200);
 
 				playerRigidBody.AddForce (jumpVector);  
-
-				isGrounded = false;
 			}
 		}	
 	}
