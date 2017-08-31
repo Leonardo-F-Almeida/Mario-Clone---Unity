@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour 
 {
 	protected int _life  =  1;
-	protected bool _grounded;
 	protected bool _dead;
     public AudioClip lifePicked;
 
@@ -15,12 +14,6 @@ public class PlayerController : MonoBehaviour
 		{
 			return _dead;
 		}
-	}
-
-	public bool isGrounded
-	{
-		get { return _grounded; }
-		set { _grounded = value; }
 	}
 
 	public int life
@@ -35,8 +28,7 @@ public class PlayerController : MonoBehaviour
 	{
 		this._life += qtd;	
 	}
-
-
+    
 	Animator _animator;
 	public Animator playerAnimator
 	{
@@ -48,20 +40,6 @@ public class PlayerController : MonoBehaviour
 			}
 
 			return _animator;
-		}
-	}
-
-	SpriteRenderer _spriteRenderer;
-	public SpriteRenderer playerSpriteRenderer
-	{
-		get
-		{
-			if(_spriteRenderer == null)
-			{
-				_spriteRenderer = GetComponent<SpriteRenderer>();
-			}
-
-			return _spriteRenderer;
 		}
 	}
 
@@ -120,14 +98,7 @@ public class PlayerController : MonoBehaviour
 			_animator = GetComponent<Animator>();
 		}
 
-		if (GetComponent<SpriteRenderer>() == null)
-		{
-			Debug.LogError("Get spriteRenderer error");
-		}
-		else
-		{
-			_spriteRenderer = GetComponent<SpriteRenderer>();
-		}
+		
 
 		if (GetComponent<Rigidbody2D>() == null)
 		{

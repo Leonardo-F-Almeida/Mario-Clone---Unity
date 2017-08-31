@@ -2,85 +2,102 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : PlayerController {
+public class PlayerMovement : PhysicsObject
+{
 
 
-    public float speed;             //Floating point variable to store the player's movement speed.
+    public float maxSpeed = 2;
+    public float jumpTakeOffSpeed = 3;
     public AudioClip jumpSoundClip;
-
-    void FixedUpdate()
+    SpriteRenderer _spriteRenderer;
+    public SpriteRenderer playerSpriteRenderer
     {
-		Move ();
-		Jump ();
+        get
+        {
+            if (_spriteRenderer == null)
+            {
+                _spriteRenderer = GetComponent<SpriteRenderer>();
+            }
+
+            return _spriteRenderer;
+        }
     }
 
+    AudioSource _audioSource;
+    public AudioSource playerAudioSource
+    {
+        get
+        {
+            if (_audioSource == null)
+            {
+                _audioSource = GetComponent<AudioSource>();
+            }
 
-	void Move()
-	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
+            return _audioSource;
+        }
+    }
+    PlayerAnimationController _playerAnimation;
+    public PlayerAnimationController playerAnimationController
+    {
+        get
+        {
+            if (_playerAnimation == null)
+            {
+                _playerAnimation = GetComponent<PlayerAnimationController>();
+            }
 
-		if (playerRigidBody.velocity.y == 0) 
-		{
-			if (isGrounded != true) 
-			{
-				isGrounded = true;
-				playerAnimation.Jump (false);	
-			}
-		}
-		else 
-		{
-			isGrounded = false;
-		}
+            return _playerAnimation;
+        }
+    }
+    
+    protected override void ComputeVelocity()
+    {
+        playerAnimationController.RunningAnimation(false);
 
-		if(moveHorizontal == 0)
-		{
-			playerAnimation.RunningAnimation (false);	
-		}
-		else
-		{
-			playerAnimation.RunningAnimation (true);
-		}
+        if(grounded)
+        {
+            playerAnimationController.Jump(false);
+        }
+        
+        Vector2 move = Vector2.zero;
 
+        move.x = Input.GetAxis("Horizontal");
+        
+        if (Input.GetButtonDown("Jump") && grounded)
+        {
+            velocity.y = jumpTakeOffSpeed;
+            PlayJumpSound();
+            playerAnimationController.Jump(true);
+        }
+        else if (Input.GetButtonUp("Jump"))
+        {
+            if (velocity.y > 0)
+            {
+                velocity.y = velocity.y * 0.5f;
+            }
+        }
 
-		if(moveHorizontal < 0)
-		{
-			playerSpriteRenderer.flipX = true;
-		}
+        if (move.x > 0.001f && move.x != 0)
+        {
+            playerSpriteRenderer.flipX = false;
+            playerAnimationController.RunningAnimation(true);
+        }
 
-		if(moveHorizontal > 0)
-		{
-			playerSpriteRenderer.flipX = false;	
-		}
+        if (move.x < 0.001f && move.x != 0)
+        {
+            playerSpriteRenderer.flipX = true;
+            playerAnimationController.RunningAnimation(true);
+        }
+        
+        targetVelocity = move * maxSpeed;
+    }
 
-		Vector2 movement = new Vector2 (moveHorizontal, 0);
-
-		playerRigidBody.AddForce (movement * speed);
-
-		if (moveHorizontal > 0  && isGrounded && Input.GetKeyDown(KeyCode.LeftArrow)||moveHorizontal < 0 && isGrounded && Input.GetKeyDown(KeyCode.RightArrow)) 
-		{
-			playerAnimation.Drift ();
-		}
-	}
-
-	void Jump()
-	{
-		if(Input.GetKeyDown("space"))
-		{
-			if(isGrounded)
-			{
-				playerAnimation.Jump (true);
-
-				Vector2 jumpVector = new Vector2 (0, 200);
-                PlayJumpSound();
-				playerRigidBody.AddForce (jumpVector);  
-			}
-		}	
-	}
 
     void PlayJumpSound()
     {
         playerAudioSource.clip = jumpSoundClip;
         playerAudioSource.Play();
     }
-		
+
+
 }

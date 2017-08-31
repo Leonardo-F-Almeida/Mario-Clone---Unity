@@ -34,7 +34,6 @@ public class PlayerAnimationController : PlayerController
 		GetComponent<BoxCollider2D> ().size = newBoxColliderSize;	
 		_marioState = 1;
 	}
-		
 
 	public void RunningAnimation(bool isRunning)
 	{
