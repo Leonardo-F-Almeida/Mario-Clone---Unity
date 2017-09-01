@@ -5,9 +5,11 @@ using UnityEngine;
 public class CameraFollowController : MonoBehaviour {
 
 	public GameObject player;       //Public variable to store a reference to the player game object
-	public float maxHeight;
-    private Vector3 offset;         //Private variable to store the offset distance between the player and camera
-	private float _minValueForXPosition;
+    public float maxHeight;
+    public Vector3 offset;         //Private variable to store the offset distance between the player and camera
+    public float _minValueForXPosition;
+    public float _startFollowAt;
+    private bool firstUpdate = true;
     // Use this for initialization
     void Start () 
     {
@@ -33,6 +35,11 @@ public class CameraFollowController : MonoBehaviour {
 		}
 
 		transform.position = newPosition;
+        if(firstUpdate)
+        {
+            offset.x = 0;
+            firstUpdate = false;
+        }
     }
 
 	public float GetCameraPositionXLimit()
