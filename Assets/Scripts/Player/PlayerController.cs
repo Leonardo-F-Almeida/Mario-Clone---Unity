@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour 
 {
 	protected int _life  =  1;
 	protected bool _dead;
     public AudioClip lifePicked;
+    public AudioClip deathSound;
 
 	public bool isDead
 	{
@@ -73,7 +75,6 @@ public class PlayerController : MonoBehaviour
 
 
 	PlayerAnimationController _playerAnimationController;
-
 	public PlayerAnimationController playerAnimation
 	{
 		get
@@ -86,6 +87,22 @@ public class PlayerController : MonoBehaviour
 			return _playerAnimationController;
 		}
 	}
+
+    PlayerMovement _playerMovement;
+    public PlayerMovement playerMovement
+    {
+        get
+        {
+            if(_playerMovement == null)
+            {
+                _playerMovement = GetComponent<PlayerMovement>();
+            }
+
+            return _playerMovement;
+        }
+
+    }
+
 
 	void Start()
 	{
@@ -122,7 +139,6 @@ public class PlayerController : MonoBehaviour
 		
 	void OnCollisionEnter2D(Collision2D coll) 
 	{
-		
 		if (coll.gameObject.tag == "Life")
 		{
 			_life += 1;
@@ -147,8 +163,25 @@ public class PlayerController : MonoBehaviour
 			if (_life <= 0) 
 			{
 				_dead = true;
+                DisableMovement();
+                playerAudioSource.clip = deathSound;
+                playerAudioSource.Play();
+                playerAnimation.Dead();
+                StartCoroutine(ReloadScene());
 			}
 		}
 	}
+
+    IEnumerator ReloadScene()
+    {
+        yield return new WaitForSecondsRealtime(deathSound.length);
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
+    void DisableMovement()
+    {
+        playerMovement.enabled = false;
+    }
 
 }

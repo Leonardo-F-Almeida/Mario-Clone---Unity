@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : PhysicsObject
 {
-
-
     public float maxSpeed = 2;
     public float jumpTakeOffSpeed = 3;
     public AudioClip jumpSoundClip;

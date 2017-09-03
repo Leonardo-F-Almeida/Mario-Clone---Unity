@@ -49,4 +49,9 @@ public class PlayerAnimationController : PlayerController
 	{
 		playerAnimator.SetTrigger ("drift");
 	}
+
+    public void Dead()
+    {
+        playerAnimator.SetBool("isDead",true);
+    }
 }
