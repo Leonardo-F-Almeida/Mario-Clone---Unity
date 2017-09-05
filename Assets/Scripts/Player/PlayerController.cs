@@ -150,27 +150,36 @@ public class PlayerController : MonoBehaviour
                 playerAnimation.GrowMario();
 			}
 		}
+        if (coll.gameObject.tag == "DeathArea")
+        {
+            this.Die();
+        }
+    }
 
-		if (coll.gameObject.tag == "Enemy")
-		{
-			_life -= 1;
+    public void EnemyCollision()
+    {
+        _life -= 1;
+        
+        if (playerAnimation.marioState == 1)
+        {
+            playerAnimation.DecreaseMario();
+        }
 
-			if(playerAnimation.marioState == 1)
-			{
-				playerAnimation.DecreaseMario();
-			}
+        if (_life <= 0)
+        {
+            this.Die();
+        }
+    }
 
-			if (_life <= 0) 
-			{
-				_dead = true;
-                DisableMovement();
-                playerAudioSource.clip = deathSound;
-                playerAudioSource.Play();
-                playerAnimation.Dead();
-                StartCoroutine(ReloadScene());
-			}
-		}
-	}
+    void Die()
+    {
+        _dead = true;
+        DisableMovement();
+        playerAudioSource.clip = deathSound;
+        playerAudioSource.Play();
+        playerAnimation.Dead();
+        StartCoroutine(ReloadScene());
+    }
 
     IEnumerator ReloadScene()
     {
