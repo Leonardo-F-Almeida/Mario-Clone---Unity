@@ -8,6 +8,7 @@ public class GoombaHead : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
+            coll.gameObject.GetComponent<PlayerMovement>().EnemyBounce();
             this.GetComponentInParent<Goomba>().Hit();
             Destroy(gameObject);
         }

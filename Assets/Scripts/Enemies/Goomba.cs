@@ -6,6 +6,7 @@ public class Goomba : PhysicsObject {
 
     public float maxSpeed = 2;
     public LayerMask backgroundLayer;
+    public AudioClip steppedSound;
     protected Vector2 moveDirection = Vector2.right;
     protected bool _startMove = false;
     protected bool isHit = false;
@@ -41,11 +42,14 @@ public class Goomba : PhysicsObject {
     public void Hit()
     {
         isHit = true;
+        GetComponent<AudioSource>().clip = steppedSound;
+        GetComponent<AudioSource>().Play();
+        GetComponent<Rigidbody2D>().isKinematic = true;
         GetComponent<Animator>().SetBool("stepped", true);
         // make sure collision are off between the playerLayer and the enemyLayer
         int backgroundLayer = LayerMask.NameToLayer("background");
-        gameObject.layer = backgroundLayer;
-        Destroy(gameObject, 1f);
+        gameObject.layer    = backgroundLayer;
+        Destroy(gameObject, 0.5f);
     }
 
 }

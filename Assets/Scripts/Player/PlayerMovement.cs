@@ -90,6 +90,13 @@ public class PlayerMovement : PhysicsObject
         targetVelocity = move * maxSpeed;
     }
 
+    public void EnemyBounce()
+    {
+        velocity.y = jumpTakeOffSpeed;
+        PlayJumpSound();
+        playerAnimationController.Jump(true);
+    }
+
 
     void PlayJumpSound()
     {

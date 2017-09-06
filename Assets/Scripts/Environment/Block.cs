@@ -30,7 +30,7 @@ public class Block : MonoBehaviour {
     {
         Vector3 newPosition = transform.parent.position;
         //Need to change
-        newPosition.y = newPosition.y + (float)0.067;
+        //newPosition.y = newPosition.y + (float)0.067;
         GameObject newItem = Instantiate(item, newPosition, transform.rotation);
         newItem.transform.parent = transform.parent;
     }
